@@ -13,6 +13,7 @@ body {
   background: linear-gradient(#2b0000, #4b0000);
   text-align: center;
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
 /* 💗 GLOBAL TEXT */
@@ -41,7 +42,7 @@ body, header, #notif, .front, .back, .main-title {
   justify-content: center;
   font-size: 22px;
   z-index: 9999;
-  animation: fadeOut 2s ease 5s forwards;
+  animation: fadeOut 2s ease 3s forwards;
 }
 
 @keyframes fadeOut {
@@ -66,7 +67,14 @@ header {
 }
 
 /* 💌 LETTERS */
-.letters { padding: 20px; }
+.letters {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 100vh;
+}
 
 .letter {
   width: 280px;
@@ -82,7 +90,7 @@ header {
 .letter-inner {
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.9s;
+  transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .front, .back {
@@ -104,43 +112,41 @@ header {
 
 .front {
   background: rgba(255,255,255,0.9);
-  color: #2b0000;
 }
 
 .back {
   background: white;
-  color: #2b0000;
-  transform: rotateY(180deg);
 }
 
 .letter.open .letter-inner {
-  transform: rotateY(180deg);
-  box-shadow: 0 0 20px rgba(255,192,203,0.5);
+  transform: rotateY(180deg) scale(1.05) translateY(-10px);
+  box-shadow: 0 0 30px rgba(255,192,203,0.7);
 }
 
 /* 🌸 PETALS */
 .petal {
   position: fixed;
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 20px;
   background: pink;
   border-radius: 50% 50% 50% 0;
-  opacity: 0.7;
+  opacity: 0.8;
+  transform: rotate(45deg);
 }
 
 @keyframes fall {
-  0% { transform: translateY(-10vh); }
-  100% { transform: translateY(110vh); }
+  0% { transform: translateY(-5vh) rotate(45deg); opacity: 0.8; }
+  100% { transform: translateY(105vh) rotate(45deg); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
-<div id="intro">For Yllaena… 💔🌸</div>
+<div id="intro">For Yllaena… 🌸</div>
 
 <h1 class="main-title">For Yllaena Reis Bustilla Ednave 💗</h1>
-<header>Farewell Yllaena 💔🌸</header>
+<header>Farewell Yllaena 🌸</header>
 
 <!-- 🎵 MUSIC -->
 <audio id="music" loop>
@@ -160,7 +166,7 @@ header {
 <script>
 let started = false;
 
-document.body.addEventListener("click", () => {
+setTimeout(() => {
   if (started) return;
   started = true;
   const m = document.getElementById("music");
@@ -174,7 +180,7 @@ document.body.addEventListener("click", () => {
       m.volume = v;
     } else clearInterval(fade);
   }, 120);
-}, { once: true });
+}, 3000);
 
 function openSound() {
   document.getElementById("openSound").play();
@@ -187,7 +193,7 @@ const data = [
 "Kahit malayo ka na, you’ll always be remembered here.",
 "Yuna, Raven, Marlin, Camille, Lorraine, Fatima will miss you.",
 "10 Mabini will miss you.",
-"And I will miss you the most… see you again 💔",
+"And I will miss you the most… see you again ",
 "Kahit nasa Singapore ka na, nandito lang kami.",
 "Take care palagi, huwag mo kami kalimutan.",
 "This isn't goodbye forever."
@@ -214,15 +220,15 @@ data.forEach(t => {
   container.appendChild(l);
 });
 
-/* 💔 BIG FINAL LETTER */
+/*  BIG FINAL LETTER */
 const big = document.createElement("div");
 big.className = "letter big-letter";
 
 big.innerHTML = `
 <div class="letter-inner">
-  <div class="front">💔 ONE LAST LETTER</div>
+  <div class="front"> ONE LAST LETTER</div>
   <div class="back">
-  Yllaena, I know you're scared about what the future has ahead, but I pinky promise you—I will always be there for you. Kahit hindi na tayo makapag-usap araw-araw because of your parents, I will still love you always. If ever we end, I hope we find each other again when the time is right. I pinky promise I am proudly devoted to you, Yllaena… only you. 💔
+  Yllaena, I know you're scared about what the future has ahead, but I pinky promise you I will always be there for you. Kahit hindi na tayo makakapagusap araw araw because of your parents, I will still love you always. If ever we end, I hope we find each other again when the time is right. I pinky promise I am proudly devoted to you, Yllaena… only you. 
   </div>
 </div>
 `;
@@ -239,6 +245,8 @@ function petals() {
   const p = document.createElement("div");
   p.className = "petal";
   p.style.left = Math.random()*window.innerWidth + "px";
+  const colors = ['pink', 'lightpink', 'hotpink', 'deeppink', 'palevioletred', 'lavender', 'thistle', 'plum'];
+  p.style.background = colors[Math.floor(Math.random()*colors.length)];
   p.style.animation = `fall ${5+Math.random()*5}s linear`;
   document.body.appendChild(p);
   setTimeout(() => p.remove(), 9000);
